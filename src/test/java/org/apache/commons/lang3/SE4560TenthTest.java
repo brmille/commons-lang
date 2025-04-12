@@ -21,45 +21,37 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
 public class SE4560TenthTest {
-    // Boundary value test on StringUtil's join() method
+    // Class partition tests on StringUtil's abbreviate() methods
     @Test
-    void JoinNullTest() {
-        String array[] = {null};
-        assertEquals("", StringUtils.join(array, "", 0, 0));
+    void AbbreviateShortTest() {
+        assertEquals("abc", StringUtils.abbreviate("abc", 4));
     }
     @Test
-    void JoinEmptyTest() {
-        String array[] = {};
-        assertEquals("", StringUtils.join(array, "", 0, 0));
+    void AbbreviateLongTest() {
+        assertEquals("a...", StringUtils.abbreviate("abcdefg", 4));
     }
     @Test
-    void JoinNormalTest() {
-        String array[] = {"a", "b", "c"};
-        assertEquals("a,b,c", StringUtils.join(array, ",", 0, 3));
+    void AbbreviateNullTest() {
+        assertEquals(null, StringUtils.abbreviate(null, 4));
     }
     @Test
-    void JoinNumTest() {
-        Integer array[] = {1, 2, 3};
-        assertEquals("1,2,3", StringUtils.join(array, ",", 0, 3));
+    void AbbreviateNormalTest() {
+        assertEquals("abc...", StringUtils.abbreviate("abcdefghi", 6));
     }
     @Test
-    void JoinHighIndexTest() {
-        String array[] = {"a", "b", "c"};
-        assertEquals("a,b,c", StringUtils.join(array, ",", 0, 5));
+    void AbbreviateInvalidTest() {
+        assertThrows(IllegalArgumentException.class, () -> {StringUtils.abbreviate("abc", 1);});
     }
     @Test
-    void JoinLowIndexTest() {
-        String array[] = {"a", "b", "c"};
-        assertEquals("a", StringUtils.join(array, ",", 0, 1));
+    void AbbreviateOffsetTest() {
+        assertEquals("...abc...", StringUtils.abbreviate("12345abc12345", 5, 9));
     }
     @Test
-    void JoinOutOfBoundsTest() {
-        String array[] = {"a", "b", "c"};
-        assertThrows(IllegalArgumentException.class, () -> {StringUtils.join(array, ",", -1, 3);});
+    void AbbreviateMarkerTest() {
+        assertEquals("-abc-", StringUtils.abbreviate("123abc123","-", 3, 5));
     }
     @Test
-    void JoinNoIndexTest() {
-        String array[] = {"a", "b", "c"};
-        assertEquals("a,b,c", StringUtils.join(array, ","));
+    void AbbreviateMarkerInvalidTest() {
+        assertThrows(IllegalArgumentException.class, () -> {StringUtils.abbreviate("12345abc12345", ".....", 7, 10);});
     }
 }
